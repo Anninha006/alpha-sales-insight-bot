@@ -16,6 +16,16 @@ const Upload = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const normalizeColumnName = (name: string): string => {
+    return name
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // Remove acentos
+      .replace(/[^a-z0-9]/g, "_")
+      .replace(/_+/g, "_")
+      .replace(/^_|_$/g, "");
+  };
+
   const handleFileUpload = async (monthIndex: number, file: File) => {
     try {
       const data = await file.arrayBuffer();
@@ -24,26 +34,37 @@ const Upload = () => {
       const worksheet = workbook.Sheets[sheetName];
       const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-      // Validar estrutura
+      // Validar se há dados
       if (jsonData.length === 0) {
         throw new Error("Planilha vazia");
       }
 
-      const firstRow = jsonData[0] as any;
-      const requiredColumns = ["Data", "ID_Transacao", "Produto", "Categoria", "Região", "Quantidade", "Preço_Unitário", "Receita_Total"];
-      const hasAllColumns = requiredColumns.every(col => col in firstRow);
+      // Normalizar os nomes das colunas para garantir compatibilidade
+      const normalizedData = jsonData.map((row: any) => {
+        const normalizedRow: any = {};
+        Object.keys(row).forEach(key => {
+          const normalizedKey = normalizeColumnName(key);
+          normalizedRow[normalizedKey] = row[key];
+        });
+        return normalizedRow;
+      });
 
-      if (!hasAllColumns) {
-        throw new Error("Planilha não contém todas as colunas necessárias");
+      // Verificar se há pelo menos algumas colunas de dados
+      const firstRow = normalizedData[0];
+      const columnCount = Object.keys(firstRow).length;
+      
+      if (columnCount < 3) {
+        throw new Error("Planilha precisa ter pelo menos 3 colunas de dados");
       }
 
-      // Salvar no localStorage
-      localStorage.setItem(`sales_${monthIndex}`, JSON.stringify(jsonData));
+      // Salvar no localStorage com dados normalizados
+      localStorage.setItem(`sales_${monthIndex}`, JSON.stringify(normalizedData));
+      localStorage.setItem(`sales_${monthIndex}_original`, JSON.stringify(jsonData));
       
       setUploadedFiles(prev => ({ ...prev, [monthIndex]: true }));
       toast({
         title: "Upload concluído",
-        description: `Planilha de ${MONTHS[monthIndex]} carregada com sucesso!`,
+        description: `Planilha de ${MONTHS[monthIndex]} carregada com sucesso! (${normalizedData.length} linhas, ${columnCount} colunas)`,
       });
     } catch (error) {
       toast({

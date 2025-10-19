@@ -64,10 +64,16 @@ const BotPage = () => {
       const data = localStorage.getItem(`sales_${i}`);
       if (data) {
         const parsed = JSON.parse(data);
-        allData.push(...parsed.map((item: any) => ({ ...item, Mês: MONTHS[i] })));
+        allData.push(...parsed.map((item: any) => ({ ...item, mes: MONTHS[i], mes_index: i + 1 })));
       }
     }
     return allData;
+  };
+
+  const getDataStructure = (data: any[]) => {
+    if (data.length === 0) return "Sem dados disponíveis";
+    const columns = Object.keys(data[0]);
+    return `Colunas disponíveis: ${columns.join(", ")}`;
   };
 
   const handleSend = async () => {
@@ -89,12 +95,20 @@ const BotPage = () => {
 
     try {
       const salesData = getAllSalesData();
+      
+      if (salesData.length === 0) {
+        throw new Error("Nenhum dado disponível para análise");
+      }
+
+      const dataStructure = getDataStructure(salesData);
       const dataSummary = `Dados disponíveis: ${salesData.length} transações de vendas de ${loadedSheets.join(", ")}.
       
-Estrutura dos dados: Data, ID_Transacao, Produto, Categoria, Região, Quantidade, Preço_Unitário, Receita_Total, Mês.
+${dataStructure}
 
 Amostra dos dados (primeiras 5 transações):
-${JSON.stringify(salesData.slice(0, 5), null, 2)}`;
+${JSON.stringify(salesData.slice(0, 5), null, 2)}
+
+IMPORTANTE: Analise os dados conforme a estrutura real apresentada acima. Os nomes das colunas podem variar, mas o conteúdo representa vendas da empresa Alpha Insights.`;
 
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`,
