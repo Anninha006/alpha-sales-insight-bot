@@ -1,73 +1,156 @@
-# Welcome to your Lovable project
+# Alpha Insights - Bot Analítico de Vendas
 
-## Project info
+Sistema de análise de vendas com Inteligência Artificial, desenvolvido para a empresa Alpha Insights. O bot utiliza a Gemini API para processar e analisar dados de vendas mensais, fornecendo insights em linguagem natural.
 
-**URL**: https://lovable.dev/projects/7224376a-258c-4a8c-8831-fc388f2f4d9c
+## 🚀 Funcionalidades
 
-## How can I edit this code?
+- **Upload de Planilhas**: Carregue 12 planilhas mensais de vendas (Janeiro a Dezembro)
+- **Análise com IA**: Faça perguntas em linguagem natural sobre seus dados de vendas
+- **Insights Acionáveis**: Receba análises detalhadas e recomendações estratégicas
+- **Interface Moderna**: Design profissional e responsivo com tema corporativo
 
-There are several ways of editing your application.
+## 📊 Estrutura de Dados
 
-**Use Lovable**
+Cada planilha deve conter as seguintes colunas:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/7224376a-258c-4a8c-8831-fc388f2f4d9c) and start prompting.
+- **Data**: Data da transação (formato: YYYY-MM-DD)
+- **ID_Transacao**: Identificador único da venda
+- **Produto**: Nome do produto vendido
+- **Categoria**: Categoria do produto
+- **Região**: Região de venda
+- **Quantidade**: Número de unidades vendidas
+- **Preço_Unitário**: Preço de venda por unidade
+- **Receita_Total**: Quantidade × Preço_Unitário
 
-Changes made via Lovable will be committed automatically to this repo.
+**Requisitos**: Mínimo de 200 linhas por planilha | Formatos aceitos: .xlsx, .xls, .csv
 
-**Use your preferred IDE**
+## 🔧 Tecnologias
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Frontend**: React + TypeScript + Vite
+- **Estilização**: Tailwind CSS + shadcn/ui
+- **IA**: Google Gemini API
+- **Processamento**: SheetJS (xlsx)
+- **Hospedagem**: Vercel
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🌐 Deploy no Vercel
 
-Follow these steps:
+### Método 1: Deploy Direto via GitHub
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+1. Faça push do código para um repositório GitHub
+2. Acesse [vercel.com](https://vercel.com)
+3. Clique em "Add New" > "Project"
+4. Importe seu repositório
+5. Configure:
+   - **Framework Preset**: Vite
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+6. Clique em "Deploy"
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Método 2: Deploy via CLI
 
-# Step 3: Install the necessary dependencies.
-npm i
+```bash
+# Instalar Vercel CLI
+npm i -g vercel
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+# Fazer login
+vercel login
+
+# Deploy
+vercel
 ```
 
-**Edit a file directly in GitHub**
+## 📝 Como Usar
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### 1. Configuração Inicial
 
-**Use GitHub Codespaces**
+Após o deploy, acesse o site e:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+1. Vá para a página de **Upload**
+2. Configure sua **Gemini API Key** (obtenha em [ai.google.dev](https://ai.google.dev))
+3. Faça upload das 12 planilhas mensais
 
-## What technologies are used for this project?
+### 2. Análise de Dados
 
-This project is built with:
+1. Acesse a página do **Bot Analítico**
+2. Faça perguntas como:
+   - "Qual foi o produto mais vendido no terceiro trimestre?"
+   - "Qual a variação percentual de receita entre janeiro e dezembro?"
+   - "Qual região teve melhor desempenho em vendas?"
+   - "Mostre as tendências de vendas por categoria"
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### 3. Exemplos de Perguntas
 
-## How can I deploy this project?
+- Análise de performance: "Qual mês teve maior receita total?"
+- Comparações: "Compare as vendas do primeiro e segundo semestre"
+- Tendências: "Quais produtos tiveram crescimento constante?"
+- Por região: "Qual região vendeu mais notebooks?"
 
-Simply open [Lovable](https://lovable.dev/projects/7224376a-258c-4a8c-8831-fc388f2f4d9c) and click on Share -> Publish.
+## 🔐 Segurança
 
-## Can I connect a custom domain to my Lovable project?
+⚠️ **IMPORTANTE**: A API Key da Gemini é armazenada localmente no navegador (localStorage). 
 
-Yes, you can!
+**Para produção**, considere:
+- Implementar um backend para proteger a API Key
+- Usar variáveis de ambiente do Vercel
+- Adicionar autenticação de usuários
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🛠️ Desenvolvimento Local
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+```bash
+# Instalar dependências
+npm install
+
+# Executar em modo de desenvolvimento
+npm run dev
+
+# Build para produção
+npm run build
+
+# Preview do build
+npm run preview
+```
+
+## 📱 Páginas
+
+- **`/`** - Página inicial com informações do sistema
+- **`/upload`** - Upload e gerenciamento das planilhas mensais
+- **`/bot`** - Interface do bot analítico
+
+## 🎨 Design System
+
+O projeto utiliza um design system profissional com:
+
+- **Cores primárias**: Azul corporativo (#1E40AF)
+- **Cores secundárias**: Verde para insights positivos (#22C55E)
+- **Tema**: Suporte a modo claro e escuro
+- **Componentes**: shadcn/ui customizados
+
+## 📦 Estrutura do Projeto
+
+```
+src/
+├── components/ui/     # Componentes UI (shadcn)
+├── pages/            # Páginas da aplicação
+│   ├── Index.tsx     # Página inicial
+│   ├── Upload.tsx    # Upload de planilhas
+│   ├── Bot.tsx       # Bot analítico
+│   └── NotFound.tsx  # Página 404
+├── hooks/            # Custom hooks
+├── lib/              # Utilitários
+├── App.tsx           # Configuração de rotas
+└── index.css         # Design system
+```
+
+## 📄 Licença
+
+Este projeto foi desenvolvido para fins educacionais como parte da atividade de "Desenvolvimento de um Bot Analítico de Vendas com Gemini API".
+
+## 🎓 Projeto Acadêmico
+
+Desenvolvido por: [Seu Nome]
+Disciplina: [Nome da Disciplina]
+Instituição: [Nome da Instituição]
+
+---
+
+**Alpha Insights** - Transformando dados em decisões estratégicas 🚀
