@@ -18,12 +18,14 @@ const MONTHS = [
   "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
 
+const DEFAULT_API_KEY = "AIzaSyD0fuAwdtnCMzqjiST6_Y76QXhs2T6ff5A";
+
 const BotPage = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadedSheets, setLoadedSheets] = useState<string[]>([]);
-  const [apiKey, setApiKey] = useState("");
+  const [apiKey, setApiKey] = useState(DEFAULT_API_KEY);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -39,10 +41,12 @@ const BotPage = () => {
     }
     setLoadedSheets(sheets);
 
-    // Carregar API key
+    // Carregar API key (usa a padrão se não houver salva)
     const savedKey = localStorage.getItem("gemini_api_key");
     if (savedKey) {
       setApiKey(savedKey);
+    } else {
+      localStorage.setItem("gemini_api_key", DEFAULT_API_KEY);
     }
 
     if (sheets.length === 0) {
