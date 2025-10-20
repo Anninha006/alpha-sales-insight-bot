@@ -101,15 +101,10 @@ const BotPage = () => {
       }
 
       const dataStructure = getDataStructure(salesData);
-      const dataSummary = `Dados disponíveis: ${salesData.length} transações de vendas de ${loadedSheets.join(", ")}.
       
-${dataStructure}
-
-Amostra dos dados (primeiras 5 transações):
-${JSON.stringify(salesData.slice(0, 5), null, 2)}
-
-IMPORTANTE: Analise os dados conforme a estrutura real apresentada acima. Os nomes das colunas podem variar, mas o conteúdo representa vendas da empresa Alpha Insights.`;
-
+      // Enviar todos os dados (limitar a 500 linhas para não exceder limite da API)
+      const dataToSend = salesData.slice(0, 500);
+      
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`,
         {
@@ -118,13 +113,32 @@ IMPORTANTE: Analise os dados conforme a estrutura real apresentada acima. Os nom
           body: JSON.stringify({
             contents: [{
               parts: [{
-                text: `Você é um analista de vendas da empresa Alpha Insights. Analise os dados de vendas e responda de forma clara e profissional.
+                text: `Você é um analista de dados especializado em vendas. Você TEM CAPACIDADE de processar e analisar dados JSON.
 
-${dataSummary}
+**DADOS DE VENDAS (formato JSON):**
+${JSON.stringify(dataToSend, null, 2)}
 
-Pergunta do usuário: ${input}
+**INFORMAÇÕES:**
+- Total de transações disponíveis: ${salesData.length}
+- Meses com dados: ${loadedSheets.join(", ")}
+- ${dataStructure}
 
-Responda com insights acionáveis e, quando relevante, forneça números específicos e tendências.`
+**INSTRUÇÕES IMPORTANTES:**
+1. Você DEVE processar os dados JSON fornecidos acima
+2. Você PODE e DEVE fazer cálculos matemáticos (somas, médias, porcentagens, etc.)
+3. Analise os dados reais, NÃO use placeholders como "R$ X" ou "R$ Y"
+4. Forneça números específicos e exatos extraídos dos dados
+5. Identifique os nomes reais das colunas nos dados (elas podem variar)
+6. Use a coluna que representa valor/receita para cálculos financeiros
+7. Use a coluna "mes" para agrupar por mês
+
+**PERGUNTA DO USUÁRIO:** ${input}
+
+**FORMATO DE RESPOSTA:**
+- Forneça números reais e específicos
+- Mostre cálculos quando relevante
+- Seja direto e objetivo
+- Inclua insights acionáveis ao final`
               }]
             }]
           })
