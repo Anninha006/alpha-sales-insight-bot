@@ -150,7 +150,17 @@ ${JSON.stringify(dataToSend, null, 2)}
       );
 
       if (!response.ok) {
-        throw new Error("Erro ao chamar Gemini API");
+        const errorData = await response.json().catch(() => ({}));
+        
+        if (response.status === 429) {
+          throw new Error("Quota da API excedida. A chave gratuita tem limite de requisições por minuto. Aguarde alguns segundos e tente novamente.");
+        }
+        
+        if (response.status === 400) {
+          throw new Error("Requisição inválida. Verifique se a chave API está correta.");
+        }
+        
+        throw new Error(`Erro API Gemini (${response.status}): ${errorData.error?.message || 'Erro desconhecido'}`);
       }
 
       const data = await response.json();
@@ -158,9 +168,11 @@ ${JSON.stringify(dataToSend, null, 2)}
 
       setMessages(prev => [...prev, { role: "assistant", content: aiResponse }]);
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Não foi possível processar sua pergunta";
+      
       toast({
         title: "Erro na análise",
-        description: "Não foi possível processar sua pergunta",
+        description: errorMessage,
         variant: "destructive",
       });
       setMessages(prev => prev.slice(0, -1));
