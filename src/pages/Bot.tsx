@@ -18,7 +18,7 @@ const MONTHS = [
   "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
 
-const DEFAULT_API_KEY = "AIzaSyD0fuAwdtnCMzqjiST6_Y76QXhs2T6ff5A";
+const DEFAULT_API_KEY = "AIzaSyB0KNXe4HReXckcQT_UjmLYpxO8wwkTcPw";
 
 const BotPage = () => {
   const [messages, setMessages] = useState<Message[]>([]);
